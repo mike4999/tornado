@@ -607,11 +607,9 @@ class RequestHandler(object):
         if isinstance(chunk, dict):
             chunk = escape.json_encode(chunk)
             self.set_header("Content-Type", "application/json; charset=UTF-8")
-        if  isinstance(chunk,bytes_type) or isinstance(chunk,unicode_type) \
-            or isinstance(chunk,dict):
-            chunk = utf8(chunk)
-        else:
+        if  isinstance(chunk,type(None)):
             raise TypeError("write() only accepts bytes, unicode, and dict objects")
+        chunk = utf8(chunk)
         self._write_buffer.append(chunk)
 
     def render(self, template_name, **kwargs):
