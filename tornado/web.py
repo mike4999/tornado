@@ -398,7 +398,7 @@ class RequestHandler(object):
 
         The returned value is always unicode.
 
-        .. versionadded:: 3.2
+        .. iersionadded:: 3.2
         """
         return self._get_argument(name, default, self.request.query_arguments, strip)
 
@@ -607,7 +607,11 @@ class RequestHandler(object):
         if isinstance(chunk, dict):
             chunk = escape.json_encode(chunk)
             self.set_header("Content-Type", "application/json; charset=UTF-8")
-        chunk = utf8(chunk)
+        if  isinstance(chunk,bytes_type) or isinstance(chunk,unicode_type) \
+            or isinstance(chunk,dict):
+            chunk = utf8(chunk)
+        else:
+            raise TypeError("write() only accepts bytes, unicode, and dict objects")
         self._write_buffer.append(chunk)
 
     def render(self, template_name, **kwargs):
